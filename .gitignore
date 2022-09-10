@@ -1,0 +1,17 @@
+.DS_Store
+.ipynb_checkpoints
+.Rproj.user
+.Rhistory
+build
+*.dll
+*.exe
+*.log
+*.o
+*.so
+*.test
+*.vscode
+*.gcda
+*.gcno
+*.gcov
+*.dSYM
+*.egg-info
