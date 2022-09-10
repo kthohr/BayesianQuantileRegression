@@ -1,0 +1,6 @@
+[submodule "extr/gcem"]
+	path = extr/gcem
+	url = https://github.com/kthohr/gcem
+[submodule "extr/stats"]
+	path = extr/stats
+	url = https://github.com/kthohr/stats
