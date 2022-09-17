@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm -rf ./Python/build
+rm -rf ./Python/pybqreg.egg-info
