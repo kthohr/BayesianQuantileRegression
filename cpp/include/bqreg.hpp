@@ -1,6 +1,6 @@
 /*################################################################################
   ##
-  ##   Copyright (C) 2021-2022 Keith O'Hara
+  ##   Copyright (C) 2021-2023 Keith O'Hara
   ##
   ##   This file is part of the BayesianQuantileRegression library.
   ##
@@ -31,7 +31,7 @@
 #endif
 
 #ifndef BQREG_VERSION_MINOR
-    #define BQREG_VERSION_MINOR 1
+    #define BQREG_VERSION_MINOR 2
 #endif
 
 #ifndef BQREG_VERSION_PATCH
@@ -75,6 +75,10 @@
 #endif
 
 //
+
+#ifndef EIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS
+    #define EIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS
+#endif
 
 #ifdef BQREG_USE_RCPP_EIGEN
     #include <RcppEigen.h>

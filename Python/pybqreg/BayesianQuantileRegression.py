@@ -1,6 +1,6 @@
 ################################################################################
 ##
-##   Copyright (C) 2021-2022 Keith O'Hara
+##   Copyright (C) 2021-2023 Keith O'Hara
 ##
 ##   This file is part of the BayesianQuantileRegression library.
 ##

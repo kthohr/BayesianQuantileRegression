@@ -24,7 +24,7 @@ cpp_linking_args = [
 ext_modules = [
     Extension(
         "bqreg_wrapper",
-        ["interface/bqreg_module.cpp"],
+        ["interface/bqreg_py_module.cpp"],
         include_dirs=[EIGEN_INCLUDE_PATH, PYBIND11_INCLUDE_PATH, "../extr/gcem/include", "../extr/stats/include", "../cpp/include"],
         language="c++",
         extra_compile_args=cpp_compile_args,
@@ -36,7 +36,7 @@ ext_modules = [
 
 setup(
     name="pybqreg",
-    version="0.1.0",
+    version="0.2.0",
     author="Keith O'Hara",
     author_email="kth.ohr@gmail.com",
     description="Bayesian Quantile Regression",

@@ -1,6 +1,6 @@
 /*################################################################################
   ##
-  ##   Copyright (C) 2021-2022 Keith O'Hara
+  ##   Copyright (C) 2021-2023 Keith O'Hara
   ##
   ##   This file is part of the BayesianQuantileRegression library.
   ##
@@ -54,12 +54,13 @@ class bqreg_module_Py
         gibbs_output_t gibbs(const size_t n_burnin_draws, const size_t n_keep_draws);
     
     private:
+        bool keep_sigma_fixed = false;
         int omp_n_threads = -1;
         rand_engine_t rand_engine = rand_engine_t(std::random_device{}());
 
         ColVec_t beta_initial_draw;
 };
 
-#include "bqreg_module_fns.hpp"
+#include "bqreg_Py_module_fns.hpp"
 
 #endif

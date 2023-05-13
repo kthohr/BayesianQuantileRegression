@@ -1,6 +1,6 @@
 /*################################################################################
   ##
-  ##   Copyright (C) 2021-2022 Keith O'Hara
+  ##   Copyright (C) 2021-2023 Keith O'Hara
   ##
   ##   This file is part of the BayesianQuantileRegression library.
   ##
@@ -18,30 +18,29 @@
   ##
   ################################################################################*/
 
-#include <pybind11/pybind11.h>
-#include <pybind11/eigen.h>
-
 #include "bqreg.hpp"
-#include "bqreg_module_class.hpp"
+#include "bqreg_R_module_class.hpp"
 
-PYBIND11_MODULE(bqreg_wrapper, m)
+RCPP_MODULE(bqreg_wrapper)
 {
-    pybind11::class_<bqreg_module_Py>(m, "bqreg")
-        .def(pybind11::init<>())
+    using namespace Rcpp;
+    
+    class_<bqreg_module_R>("bqreg")
+        .default_constructor()
 
         //
 
-        .def( "get_omp_n_threads", &bqreg_module_Py::get_omp_n_threads )
-        .def( "set_omp_n_threads", &bqreg_module_Py::set_omp_n_threads )
+        .method( "get_omp_n_threads", &bqreg_module_R::get_omp_n_threads )
+        .method( "set_omp_n_threads", &bqreg_module_R::set_omp_n_threads )
 
-        .def( "set_seed_value", &bqreg_module_Py::set_seed_value )
+        .method( "set_seed_value", &bqreg_module_R::set_seed_value )
 
-        .def( "load_data", &bqreg_module_Py::load_data )
-        .def( "set_quantile_target", &bqreg_module_Py::set_quantile_target )
-        .def( "set_prior_params", &bqreg_module_Py::set_prior_params )
+        .method( "load_data", &bqreg_module_R::load_data )
+        .method( "set_quantile_target", &bqreg_module_R::set_quantile_target )
+        .method( "set_prior_params", &bqreg_module_R::set_prior_params )
 
-        .def( "set_initial_beta_draw", &bqreg_module_Py::set_initial_beta_draw )
+        .method( "set_initial_beta_draw", &bqreg_module_R::set_initial_beta_draw )
 
-        .def( "gibbs", &bqreg_module_Py::gibbs )
+        .method( "gibbs", &bqreg_module_R::gibbs )
     ;
 }

@@ -1,0 +1,32 @@
+# BQReg Makevars
+
+SDIR = .
+GCEM_HEADER_DIR= $(SDIR)/../../extr/gcem/include 
+STATS_HEADER_DIR= $(SDIR)/../../extr/stats/include
+BQREG_HEADER_DIR = $(SDIR)/../../cpp/include
+
+# Check for the default Apple compiler, where we pass CXX to recognise R's settings
+APPLE_COMPILER := $(shell CXX11='$(CXX)' $(CXX11) --version 2>&1 | grep -i -c -E 'apple llvm')
+
+ifeq ($(APPLE_COMPILER),0)
+    BQREG_OPENMP=$(SHLIB_OPENMP_CXXFLAGS) -DBQREG_USE_OPENMP
+else
+    BQREG_OPENMP=
+endif
+
+PKG_CPPFLAGS= $(CXX11STD) $(BQREG_OPENMP) -DBQREG_USE_RCPP_EIGEN -I$(SDIR) -I$(GCEM_HEADER_DIR) -I$(STATS_HEADER_DIR) -I$(BQREG_HEADER_DIR)
+PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+
+CXX_STD=CXX11
+
+#
+
+SOURCES_MODULES= ./bqreg_R_module.cpp
+OBJECTS_MODULES= $(SOURCES_MODULES:.cpp=.o)
+
+OBJECTS_BQREG=$(OBJECTS_MODULES)
+
+all: $(SHLIB) libBQReg.Rcpp$(SHLIB_EXT)
+
+libBQReg.Rcpp$(SHLIB_EXT): $(OBJECTS_BQREG)
+	$(SHLIB_CXX11LD) $(SHLIB_OPENMP_CXXFLAGS) $(SHLIB_CXX11LDFLAGS) -o BQReg$(SHLIB_EXT) $(OBJECTS_BQREG) $(ALL_LIBS)

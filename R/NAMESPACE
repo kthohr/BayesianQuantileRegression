@@ -1,0 +1,5 @@
+useDynLib(BQReg.Rcpp)
+
+importFrom(Rcpp, evalCpp)
+
+exportPattern("^[[:alpha:]]+")

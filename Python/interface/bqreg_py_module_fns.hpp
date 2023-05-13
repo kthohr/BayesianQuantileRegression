@@ -1,6 +1,6 @@
 /*################################################################################
   ##
-  ##   Copyright (C) 2021-2022 Keith O'Hara
+  ##   Copyright (C) 2021-2023 Keith O'Hara
   ##
   ##   This file is part of the BayesianQuantileRegression library.
   ##
@@ -83,7 +83,10 @@ bqreg_module_Py::set_initial_beta_draw(
 
 gibbs_output_t
 inline
-bqreg_module_Py::gibbs(const size_t n_burnin_draws, const size_t n_keep_draws)
+bqreg_module_Py::gibbs(
+    const size_t n_burnin_draws, 
+    const size_t n_keep_draws
+)
 {
     Mat_t beta_draws;
     Mat_t nu_draws;
@@ -99,6 +102,7 @@ bqreg_module_Py::gibbs(const size_t n_burnin_draws, const size_t n_keep_draws)
              prior_sigma_scale,
              n_burnin_draws,
              n_keep_draws,
+             keep_sigma_fixed,
              omp_n_threads,
              beta_draws,
              nu_draws,

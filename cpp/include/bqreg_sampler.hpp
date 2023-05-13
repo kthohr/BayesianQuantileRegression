@@ -1,6 +1,6 @@
 /*################################################################################
   ##
-  ##   Copyright (C) 2021-2022 Keith O'Hara
+  ##   Copyright (C) 2021-2023 Keith O'Hara
   ##
   ##   This file is part of the BayesianQuantileRegression library.
   ##
@@ -48,6 +48,7 @@ qr_gibbs_iteration(
     const fp_t prior_sigma_scale,
     const fp_t theta_par,
     const fp_t omega_sq_par,
+    const bool keep_sigma_fixed, // keep sigma^2 value fixed for sampling
     const int omp_n_threads,
     ColVec_t& beta_draw,
     ColVec_t& nu_draw,
@@ -108,20 +109,22 @@ qr_gibbs_iteration(
 
     // draw sigma
 
-    fp_t sum_err_val = 0;
+    if (!keep_sigma_fixed) {
+        fp_t sum_err_val = 0;
 
-#ifdef BQREG_USE_OPENMP
-    #pragma omp parallel for num_threads(omp_n_threads) reduction(+:sum_err_val)
-#endif
-    for (size_t i = 0; i < n; ++i) {
-        const fp_t err_val = Y(i) - X.row(i).dot(beta_draw) - theta_par * nu_draw(i);
-        sum_err_val += (err_val * err_val) / (omega_sq_par * nu_draw(i));
+    #ifdef BQREG_USE_OPENMP
+        #pragma omp parallel for num_threads(omp_n_threads) reduction(+:sum_err_val)
+    #endif
+        for (size_t i = 0; i < n; ++i) {
+            const fp_t err_val = Y(i) - X.row(i).dot(beta_draw) - theta_par * nu_draw(i);
+            sum_err_val += (err_val * err_val) / (omega_sq_par * nu_draw(i));
+        }
+
+        const fp_t post_sigma_shape_par = prior_sigma_shape + (3 * n / fp_t(2));
+        const fp_t post_sigma_scale_par = (2 * prior_sigma_scale + 2 * nu_draw.array().sum() + sum_err_val ) / 2;
+
+        sigma_draw = fp_t(1) / stats::rgamma(post_sigma_shape_par, 1 / post_sigma_scale_par, rand_engines_vec[0]);
     }
-
-    const fp_t post_sigma_shape_par = prior_sigma_shape + (3 * n / fp_t(2));
-    const fp_t post_sigma_scale_par = (2 * prior_sigma_scale + 2 * nu_draw.array().sum() + sum_err_val ) / 2;
-
-    sigma_draw = fp_t(1) / stats::rgamma(post_sigma_shape_par, 1 / post_sigma_scale_par, rand_engines_vec[0]);
 }
 
 inline
@@ -137,6 +140,7 @@ qr_gibbs(
     const fp_t prior_sigma_scale,
     const size_t n_burnin_draws,
     const size_t n_keep_draws,
+    const bool keep_sigma_fixed,
     int omp_n_threads,
     Mat_t& beta_draws_storage,
     Mat_t& nu_draws_storage,
@@ -196,6 +200,10 @@ qr_gibbs(
 
     ColVec_t nu_draw = ColVec_t::Constant(n, sigma_draw);
 
+    if (keep_sigma_fixed) {
+        sigma_draw = fp_t(1);
+    }
+
     // main loop
 
     for (size_t mcmc_ind = 0; mcmc_ind < n_total_draws; ++mcmc_ind) {
@@ -210,6 +218,7 @@ qr_gibbs(
                            prior_sigma_scale,
                            theta_par,
                            omega_sq_par,
+                           keep_sigma_fixed,
                            omp_n_threads,
                            beta_draw,
                            nu_draw,
