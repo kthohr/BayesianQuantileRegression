@@ -15,20 +15,36 @@ cd ./BayesianQuantileRegression
 git submodule update --init
 ```
 
-## Python
+## Python wrapper
+
+If you do not already have Eigen3 and Pybind11, clone and set environment variables:
+
+```bash
+# close Eigen3
+git clone https://gitlab.com/libeigen/eigen.git
+
+# close Pybind11
+git clone https://github.com/pybind/pybind11.git
+
+# set environment variables
+export EIGEN_INCLUDE_PATH = "<path to this directory>/eigen"
+export PYBIND11_INCLUDE_PATH = "<path to this directory>/pybind11/include"
+```
 
 ```bash
 # change directory into the Python subdirectory
-cd Python
+cd BayesianQuantileRegression/Python
 
+# install the package
 python3 -m pip install . --user
 ```
 
-## R
+## R wrapper
 
 ```bash
 # change directory into the R subdirectory
-cd R
+cd BayesianQuantileRegression/R
 
+# install the package
 R CMD INSTALL .
 ```
