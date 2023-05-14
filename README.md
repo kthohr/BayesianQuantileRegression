@@ -1,6 +1,6 @@
 # Bayesian Quantile Regression
 
-A light-weight C++ implementation of Bayesian quantile regression using the asymmetric Laplace density representation of the problem.
+A light-weight C++ implementation of Bayesian quantile regression using the asymmetric Laplace density representation of the problem, with wrappers for Python and R.
 
 # Installation
 
