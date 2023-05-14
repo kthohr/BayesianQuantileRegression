@@ -2,3 +2,6 @@
 
 rm -rf ./Python/build
 rm -rf ./Python/pybqreg.egg-info
+
+rm R/src/*.o
+rm R/src/*.so
