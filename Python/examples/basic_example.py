@@ -42,7 +42,7 @@ tau = 0.5
 n_burnin_draws = 10000
 n_keep_draws = 10000
 
-beta_draws, nu_draws, sigma_draws = obj.fit(tau, n_burnin_draws, n_keep_draws)
+beta_draws, nu_draws, sigma_draws = obj.fit(tau, n_burnin_draws, n_keep_draws, 0)
 
 np.mean(beta_draws, axis = 1)
 

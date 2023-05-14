@@ -85,7 +85,8 @@ gibbs_output_t
 inline
 bqreg_module_Py::gibbs(
     const size_t n_burnin_draws, 
-    const size_t n_keep_draws
+    const size_t n_keep_draws,
+    const size_t thinning_factor
 )
 {
     Mat_t beta_draws;
@@ -102,6 +103,7 @@ bqreg_module_Py::gibbs(
              prior_sigma_scale,
              n_burnin_draws,
              n_keep_draws,
+             thinning_factor,
              keep_sigma_fixed,
              omp_n_threads,
              beta_draws,

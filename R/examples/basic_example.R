@@ -50,7 +50,7 @@ bqreg_obj$set_quantile_target(tau)
 n_burnin_draws <- 10000
 n_keep_draws <- 10000
 
-gibbs_res <- bqreg_obj$gibbs(n_burnin_draws, n_keep_draws)
+gibbs_res <- bqreg_obj$gibbs(n_burnin_draws, n_keep_draws, 0)
 
 rowMeans(gibbs_res$beta_draws)
 

@@ -140,6 +140,7 @@ qr_gibbs(
     const fp_t prior_sigma_scale,
     const size_t n_burnin_draws,
     const size_t n_keep_draws,
+    const size_t thinning_factor,
     const bool keep_sigma_fixed,
     int omp_n_threads,
     Mat_t& beta_draws_storage,
@@ -171,7 +172,7 @@ qr_gibbs(
 
     //
 
-    const size_t n_total_draws = n_burnin_draws + n_keep_draws;
+    const size_t n_total_draws = n_burnin_draws + (thinning_factor + 1) * n_keep_draws;
 
     const size_t n = Y.size();
     const size_t K = X.cols();
@@ -190,10 +191,6 @@ qr_gibbs(
 
     // set initial values for the draws
 
-    // fp_t sigma_draw = 1;
-    // ColVec_t beta_draw = ColVec_t::Zero(K);
-    // ColVec_t nu_draw = ColVec_t::Constant(n, 1);
-
     ColVec_t beta_draw = beta_initial_draw;
 
     fp_t sigma_draw = (Y - X * beta_draw).array().pow(2).sum() / fp_t(n);
@@ -205,6 +202,8 @@ qr_gibbs(
     }
 
     // main loop
+
+    size_t mcmc_save_ind = 0;
 
     for (size_t mcmc_ind = 0; mcmc_ind < n_total_draws; ++mcmc_ind) {
         
@@ -227,12 +226,15 @@ qr_gibbs(
         
         // save draws
 
-        if (mcmc_ind >= n_burnin_draws) {
-            size_t mcmc_save_ind = mcmc_ind - n_burnin_draws;
+        if (mcmc_ind >= n_burnin_draws && (mcmc_ind - n_burnin_draws) % (thinning_factor + 1) == 0 ) {
+            // note: (mcmc_ind - n_burnin_draws) could underflow but 
+            // the second condition will not be checked if the first condition does not pass
 
             beta_draws_storage.col(mcmc_save_ind) = beta_draw;
             nu_draws_storage.col(mcmc_save_ind) = nu_draw;
             sigma_draws_storage(mcmc_save_ind) = sigma_draw;
+
+            ++mcmc_save_ind;
         }
     }
 }

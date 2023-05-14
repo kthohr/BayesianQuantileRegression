@@ -49,7 +49,7 @@ class bqreg_module_R
 
         void set_initial_beta_draw(const ColVec_t& beta_initial_draw_inp);
 
-        SEXP gibbs(const size_t n_burnin_draws, const size_t n_keep_draws);
+        SEXP gibbs(const size_t n_burnin_draws, const size_t n_keep_draws, const size_t thinning_factor);
     
     private:
         bool keep_sigma_fixed = false;

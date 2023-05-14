@@ -92,7 +92,8 @@ SEXP
 inline
 bqreg_module_R::gibbs(
     const size_t n_burnin_draws, 
-    const size_t n_keep_draws
+    const size_t n_keep_draws,
+    const size_t thinning_factor
 )
 {
     try {
@@ -110,6 +111,7 @@ bqreg_module_R::gibbs(
                  prior_sigma_scale,
                  n_burnin_draws,
                  n_keep_draws,
+                 thinning_factor,
                  keep_sigma_fixed,
                  omp_n_threads,
                  beta_draws,

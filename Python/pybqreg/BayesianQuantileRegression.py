@@ -129,7 +129,8 @@ class BayesianQuantileRegression:
         self,
         tau: float = 0.5,
         n_burnin_draws: int = 1000,
-        n_keep_draws: int = 1000
+        n_keep_draws: int = 1000,
+        thinning_factor: int = 0
     ) -> tuple:
         '''
         Fit method for the BayesianQuantileRegression class
@@ -137,14 +138,18 @@ class BayesianQuantileRegression:
             Parameters:
                 tau: the target quantile value
                 n_burnin_draws: the number of burn-in draws
-                n_keep_draws: the number of post-burn-in draws
+                n_keep_draws: the number of post-burn-in draws to return
+                thinning_factor: the number of draws to skip between keep draws
             
             Returns:
                 A tuple of matrices containing posterior draws, ordered as follows: (beta, nu, sigma)
+            
+            Notes:
+                The total number of draws will be: n_burnin_draws + (thinning_factor + 1) * n_keep_draws
         '''
         
         self.bqreg_obj.set_quantile_target(tau)
 
-        draws = self.bqreg_obj.gibbs(n_burnin_draws, n_keep_draws)
+        draws = self.bqreg_obj.gibbs(n_burnin_draws, n_keep_draws, thinning_factor)
 
         return draws[0], draws[1], draws[2] # (beta, nu, sigma)
