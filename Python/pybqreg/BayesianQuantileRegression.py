@@ -72,6 +72,18 @@ class BayesianQuantileRegression:
         self.bqreg_obj.set_prior_params(np.zeros(self.K), np.eye(self.K), 3, 3)
         self.bqreg_obj.set_initial_beta_draw(np.zeros(self.K))
     
+    def set_seed_value(
+        self,
+        seed_value: int
+    ):
+        '''
+        Set the RNG seed value for Gibbs sampling
+
+            Parameters:
+                seed_value: An integer value
+        '''
+        self.bqreg_obj.set_seed_value(seed_value)
+
     def get_omp_n_threads(
         self
     ) -> int:
