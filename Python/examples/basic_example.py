@@ -1,5 +1,6 @@
 # import libraries
 import numpy as np
+import matplotlib.pyplot as plt
 from pybqreg import BayesianQuantileRegression
 
 # generate data
@@ -36,6 +37,8 @@ obj.set_initial_beta_draw(beta_hat)
 obj.set_omp_n_threads(4)
 obj.get_omp_n_threads()
 
+# (optional) set the RNG seed value
+obj.set_seed_value(1111)
 
 # set the target quantile (tau) and run the Gibbs sampler
 tau = 0.5
@@ -44,8 +47,20 @@ n_keep_draws = 10000
 
 beta_draws, nu_draws, sigma_draws = obj.fit(tau, n_burnin_draws, n_keep_draws, 0)
 
-np.mean(beta_draws, axis = 1)
+beta_mean = np.mean(beta_draws, axis = 1)
+beta_std = np.std(beta_draws, axis = 1)
 
-np.mean(sigma_draws)
+# np.mean(nu_draws, axis = 1) / np.mean(sigma_draws)
 
-np.mean(nu_draws, axis = 1)
+# plot beta draws
+
+fig, axs = plt.subplots(1, 3, figsize=(15, 5), tight_layout=True)
+
+for k in range(3):
+    axs[k].hist(beta_draws[k,:], bins = 200)
+
+    axs[k].set_xlim(beta_mean[k] - 3*beta_std[k], beta_mean[k] + 3*beta_std[k])
+
+    axs[k].axvline(beta_mean[k], c = 'r')
+
+plt.show()
