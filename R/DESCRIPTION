@@ -1,8 +1,8 @@
 Package: BQReg.Rcpp
 Type: Package
 Title: Bayesian Quantile Regression
-Version: 0.2.0
-Date: 2023-05-13
+Version: 0.3.0
+Date: 2023-05-28
 Author: Keith O'Hara [aut,cre]
 Maintainer: Keith O'Hara <kth.ohr@gmail.com>
 Description: Bayesian Quantile Regression

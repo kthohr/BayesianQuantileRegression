@@ -39,6 +39,7 @@ RCPP_MODULE(bqreg_wrapper)
         .method( "set_quantile_target", &bqreg_module_R::set_quantile_target )
         .method( "set_prior_params", &bqreg_module_R::set_prior_params )
 
+        .method( "get_initial_beta_draw", &bqreg_module_R::get_initial_beta_draw )
         .method( "set_initial_beta_draw", &bqreg_module_R::set_initial_beta_draw )
 
         .method( "gibbs", &bqreg_module_R::gibbs )

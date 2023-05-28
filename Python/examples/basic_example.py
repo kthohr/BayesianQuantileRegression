@@ -21,13 +21,13 @@ obj = BayesianQuantileRegression(Y,X)
 # set prior pars
 beta_bar = np.zeros(K)
 
-Vbar = np.zeros([K, K])
-np.fill_diagonal(Vbar, 1.0/0.001)
+V0 = np.zeros([K, K])
+np.fill_diagonal(V0, 1.0/0.001)
 
-n0 = 3
-s0 = 3
+prior_shape = 3
+prior_scale = 3
 
-obj.set_prior_params(beta_bar, Vbar, n0, s0)
+obj.set_prior_params(beta_bar, V0, prior_shape, prior_scale)
 
 # (optional) set the initial draw for beta
 beta_hat = np.linalg.solve( np.matmul(X.transpose(),X), np.matmul(X.transpose(),Y) )
@@ -37,20 +37,22 @@ obj.set_initial_beta_draw(beta_hat)
 obj.set_omp_n_threads(4)
 obj.get_omp_n_threads()
 
-# (optional) set the RNG seed value
+# (optional) set the RNG seed value of the Gibbs sampler
 obj.set_seed_value(1111)
 
 # set the target quantile (tau) and run the Gibbs sampler
 tau = 0.5
+
 n_burnin_draws = 10000
 n_keep_draws = 10000
+thinning_factor = 0
 
-beta_draws, nu_draws, sigma_draws = obj.fit(tau, n_burnin_draws, n_keep_draws, 0)
+beta_draws, z_draws, sigma_draws = obj.fit(tau, n_burnin_draws, n_keep_draws, thinning_factor)
 
 beta_mean = np.mean(beta_draws, axis = 1)
 beta_std = np.std(beta_draws, axis = 1)
 
-# np.mean(nu_draws, axis = 1) / np.mean(sigma_draws)
+# np.mean(z_draws, axis = 1) / np.mean(sigma_draws)
 
 # plot beta draws
 

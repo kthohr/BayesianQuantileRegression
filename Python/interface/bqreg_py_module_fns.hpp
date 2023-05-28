@@ -48,6 +48,8 @@ bqreg_module_Py::load_data(const ColVec_t& Y_inp, const Mat_t& X_inp)
 {
     this->Y = Y_inp;
     this->X = X_inp;
+
+    this->beta_initial_draw.setZero(X.cols());
 }
 
 void
@@ -72,6 +74,13 @@ bqreg_module_Py::set_prior_params(
     this->prior_sigma_scale = prior_sigma_scale_inp;
 }
 
+ColVec_t
+inline
+bqreg_module_Py::get_initial_beta_draw()
+{
+    return this->beta_initial_draw;
+}
+
 void
 inline
 bqreg_module_Py::set_initial_beta_draw(
@@ -90,8 +99,12 @@ bqreg_module_Py::gibbs(
 )
 {
     Mat_t beta_draws;
-    Mat_t nu_draws;
+    Mat_t z_draws;
     ColVec_t sigma_draws;
+
+    if (beta_initial_draw.size() != X.cols()) {
+        beta_initial_draw.setZero(X.cols());
+    }
 
     qr_gibbs(Y,
              X,
@@ -107,11 +120,11 @@ bqreg_module_Py::gibbs(
              keep_sigma_fixed,
              omp_n_threads,
              beta_draws,
-             nu_draws,
+             z_draws,
              sigma_draws,
              rand_engine);
 
-    return std::make_tuple(beta_draws, nu_draws, sigma_draws);
+    return std::make_tuple(beta_draws, z_draws, sigma_draws);
 }
 
 #endif

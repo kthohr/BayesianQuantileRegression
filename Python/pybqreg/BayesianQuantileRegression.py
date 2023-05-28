@@ -125,6 +125,17 @@ class BayesianQuantileRegression:
         '''
         self.bqreg_obj.set_prior_params(beta_mean, beta_var, sigma_shape, sigma_scale)
 
+    def get_initial_beta_draw(
+        self
+    ) -> np.ndarray:
+        '''
+        Return the initial values of beta for the Gibbs sampler
+
+            Parameters:
+                beta_initial_draw: Initial draw vector
+        '''
+        self.bqreg_obj.get_initial_beta_draw()
+    
     def set_initial_beta_draw(
         self,
         beta_initial_draw: np.ndarray
@@ -150,11 +161,11 @@ class BayesianQuantileRegression:
             Parameters:
                 tau: the target quantile value
                 n_burnin_draws: the number of burn-in draws
-                n_keep_draws: the number of post-burn-in draws to return
+                n_keep_draws: the number of post burn-in draws to return
                 thinning_factor: the number of draws to skip between keep draws
             
             Returns:
-                A tuple of matrices containing posterior draws, ordered as follows: (beta, nu, sigma)
+                A tuple of matrices containing posterior draws, ordered as follows: (beta, z, sigma)
             
             Notes:
                 The total number of draws will be: n_burnin_draws + (thinning_factor + 1) * n_keep_draws
@@ -164,4 +175,4 @@ class BayesianQuantileRegression:
 
         draws = self.bqreg_obj.gibbs(n_burnin_draws, n_keep_draws, thinning_factor)
 
-        return draws[0], draws[1], draws[2] # (beta, nu, sigma)
+        return draws[0], draws[1], draws[2] # (beta, z, sigma)

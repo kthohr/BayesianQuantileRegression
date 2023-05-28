@@ -1,0 +1,19 @@
+PROJECT_NAME      = "bqreg"
+XML_OUTPUT        = xml
+INPUT             = ../cpp/include/bqreg/bqreg_class.hpp \
+                    ../Python/pybqreg/BayesianQuantileRegression.py
+
+GENERATE_LATEX    = NO
+GENERATE_MAN      = NO
+GENERATE_RTF      = NO
+CASE_SENSE_NAMES  = NO
+GENERATE_HTML     = NO
+GENERATE_XML      = YES
+RECURSIVE         = YES
+QUIET             = YES
+JAVADOC_AUTOBRIEF = YES
+WARN_IF_UNDOCUMENTED = NO
+
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = YES

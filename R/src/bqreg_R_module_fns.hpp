@@ -55,6 +55,8 @@ bqreg_module_R::load_data(const ColVec_t& Y_inp, const Mat_t& X_inp)
 {
     this->Y = Y_inp;
     this->X = X_inp;
+
+    this->beta_initial_draw.setZero(X.cols());
 }
 
 void
@@ -79,6 +81,20 @@ bqreg_module_R::set_prior_params(
     this->prior_sigma_scale = prior_sigma_scale_inp;
 }
 
+SEXP
+inline
+bqreg_module_R::get_initial_beta_draw()
+{
+    try {
+        return Rcpp::wrap(this->beta_initial_draw);
+    } catch( std::exception &ex ) {
+        forward_exception_to_r( ex );
+    } catch(...) {
+        ::Rf_error( "bqreg: C++ exception (unknown reason)" );
+    }
+    return R_NilValue;
+}
+
 void
 inline
 bqreg_module_R::set_initial_beta_draw(
@@ -98,8 +114,12 @@ bqreg_module_R::gibbs(
 {
     try {
         Mat_t beta_draws;
-        Mat_t nu_draws;
+        Mat_t z_draws;
         ColVec_t sigma_draws;
+
+        if (beta_initial_draw.size() != X.cols()) {
+            beta_initial_draw.setZero(X.cols());
+        }
 
         qr_gibbs(Y,
                  X,
@@ -115,12 +135,12 @@ bqreg_module_R::gibbs(
                  keep_sigma_fixed,
                  omp_n_threads,
                  beta_draws,
-                 nu_draws,
+                 z_draws,
                  sigma_draws,
                  rand_engine);
 
         return Rcpp::List::create(Rcpp::Named("beta_draws") = beta_draws, 
-                                  Rcpp::Named("nu_draws") = nu_draws, 
+                                  Rcpp::Named("z_draws") = z_draws, 
                                   Rcpp::Named("sigma_draws") = sigma_draws);
     } catch( std::exception &ex ) {
         forward_exception_to_r( ex );

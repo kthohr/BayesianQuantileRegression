@@ -40,6 +40,7 @@ PYBIND11_MODULE(bqreg_wrapper, m)
         .def( "set_quantile_target", &bqreg_module_Py::set_quantile_target )
         .def( "set_prior_params", &bqreg_module_Py::set_prior_params )
 
+        .def( "get_initial_beta_draw", &bqreg_module_Py::get_initial_beta_draw )
         .def( "set_initial_beta_draw", &bqreg_module_Py::set_initial_beta_draw )
 
         .def( "gibbs", &bqreg_module_Py::gibbs )

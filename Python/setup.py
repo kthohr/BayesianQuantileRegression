@@ -36,7 +36,7 @@ ext_modules = [
 
 setup(
     name="pybqreg",
-    version="0.2.0",
+    version="0.3.0",
     author="Keith O'Hara",
     author_email="kth.ohr@gmail.com",
     description="Bayesian Quantile Regression",

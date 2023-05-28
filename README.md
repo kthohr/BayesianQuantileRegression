@@ -1,8 +1,10 @@
 # Bayesian Quantile Regression
 
-A light-weight C++ implementation of Bayesian quantile regression using the asymmetric Laplace density representation of the problem, with wrappers for Python and R.
+A light-weight C++ implementation of Bayesian quantile regression using the asymmetric Laplace density representation of the problem, with bindings/wrappers for Python and R.
 
 # Installation
+
+Clone the library and pull the necessary submodules:
 
 ``` bash
 # clone optim into the current directory
@@ -20,10 +22,10 @@ git submodule update --init
 If you do not already have Eigen3 and Pybind11, clone and set environment variables:
 
 ```bash
-# close Eigen3
+# clone Eigen3
 git clone https://gitlab.com/libeigen/eigen.git
 
-# close Pybind11
+# clone Pybind11
 git clone https://github.com/pybind/pybind11.git
 
 # set environment variables
@@ -40,6 +42,14 @@ python3 -m pip install . --user
 ```
 
 ## R wrapper
+
+First install the `RcppEigen` package from R:
+
+```R
+install.packages("RcppEigen")
+```
+
+Then install the package from the `R` subdirectory:
 
 ```bash
 # change directory into the R subdirectory
@@ -75,13 +85,13 @@ obj = BayesianQuantileRegression(Y,X)
 # set prior pars
 beta_bar = np.zeros(K)
 
-Vbar = np.zeros([K, K])
-np.fill_diagonal(Vbar, 1.0/0.001)
+V0 = np.zeros([K, K])
+np.fill_diagonal(V0, 1.0/0.001)
 
-n0 = 3
-s0 = 3
+prior_shape = 3
+prior_scale = 3
 
-obj.set_prior_params(beta_bar, Vbar, n0, s0)
+obj.set_prior_params(beta_bar, V0, prior_shape, prior_scale)
 
 # (optional) set the initial draw for beta
 beta_hat = np.linalg.solve( np.matmul(X.transpose(),X), np.matmul(X.transpose(),Y) )
@@ -91,7 +101,7 @@ obj.set_initial_beta_draw(beta_hat)
 obj.set_omp_n_threads(4)
 obj.get_omp_n_threads()
 
-# (optional) set the RNG seed value
+# (optional) set the seed value of the Gibbs sampler RNG
 obj.set_seed_value(1111)
 
 # set the target quantile (tau) and run the Gibbs sampler
@@ -99,7 +109,7 @@ tau = 0.5
 n_burnin_draws = 10000
 n_keep_draws = 10000
 
-beta_draws, nu_draws, sigma_draws = obj.fit(tau, n_burnin_draws, n_keep_draws, 0)
+beta_draws, z_draws, sigma_draws = obj.fit(tau, n_burnin_draws, n_keep_draws, 0)
 
 beta_mean = np.mean(beta_draws, axis = 1)
 beta_std = np.std(beta_draws, axis = 1)
@@ -117,4 +127,4 @@ for k in range(3):
 
 plt.show()
 ```
-![plot)](images/median_quantile_parameter_draws.png)
+![plot)](docs/source/images/median_quantile_parameter_draws.png)

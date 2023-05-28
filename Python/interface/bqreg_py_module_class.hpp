@@ -49,6 +49,7 @@ class bqreg_module_Py
         void set_quantile_target(const fp_t tau_inp);
         void set_prior_params(const ColVec_t& prior_beta_mean_inp, const Mat_t& prior_beta_var_inp, const fp_t prior_sigma_shape_inp, const fp_t prior_sigma_scale_inp);
 
+        ColVec_t get_initial_beta_draw();
         void set_initial_beta_draw(const ColVec_t& beta_initial_draw_inp);
 
         gibbs_output_t gibbs(const size_t n_burnin_draws, const size_t n_keep_draws, const size_t thinning_factor);

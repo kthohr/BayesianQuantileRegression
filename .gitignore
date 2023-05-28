@@ -3,6 +3,9 @@
 .Rproj.user
 .Rhistory
 build
+docs/build
+docs/xml
+Python/build
 *.dll
 *.exe
 *.log

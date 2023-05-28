@@ -22,6 +22,9 @@
  * Gibbs sampler
  */
 
+#ifndef _bqreg_sampler_HPP
+#define _bqreg_sampler_HPP
+
 #ifdef BQREG_USE_OPENMP
     #pragma omp declare reduction (+: ColVec_t: omp_out=omp_out+omp_in) \
         initializer(omp_priv = ColVec_t::Zero(omp_orig.size()))
@@ -56,6 +59,8 @@ qr_gibbs_iteration(
     std::vector<rand_engine_t>& rand_engines_vec
 )
 {
+    (void)(omp_n_threads); // for !BQREG_USE_OPENMP case
+
     const size_t n = Y.size();
     const size_t K = X.cols();
 
@@ -144,7 +149,7 @@ qr_gibbs(
     const bool keep_sigma_fixed,
     int omp_n_threads,
     Mat_t& beta_draws_storage,
-    Mat_t& nu_draws_storage,
+    Mat_t& z_draws_storage,
     ColVec_t& sigma_draws_storage,
     rand_engine_t& rand_engine
 )
@@ -186,7 +191,7 @@ qr_gibbs(
     // set storage containers
 
     beta_draws_storage.setZero(K, n_keep_draws);
-    nu_draws_storage.setZero(n, n_keep_draws);
+    z_draws_storage.setZero(n, n_keep_draws);
     sigma_draws_storage.setZero(n_keep_draws);
 
     // set initial values for the draws
@@ -227,14 +232,16 @@ qr_gibbs(
         // save draws
 
         if (mcmc_ind >= n_burnin_draws && (mcmc_ind - n_burnin_draws) % (thinning_factor + 1) == 0 ) {
-            // note: (mcmc_ind - n_burnin_draws) could underflow but 
+            // note: (mcmc_ind - n_burnin_draws) could underflow but...
             // the second condition will not be checked if the first condition does not pass
 
             beta_draws_storage.col(mcmc_save_ind) = beta_draw;
-            nu_draws_storage.col(mcmc_save_ind) = nu_draw;
+            z_draws_storage.col(mcmc_save_ind) = nu_draw / sigma_draw;
             sigma_draws_storage(mcmc_save_ind) = sigma_draw;
 
             ++mcmc_save_ind;
         }
     }
 }
+
+#endif
