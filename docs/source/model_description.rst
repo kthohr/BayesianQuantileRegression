@@ -10,28 +10,30 @@ Model Description
 Classical Quantile Regression
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Denote the quantile function of a random variable, :math:`Y`, conditional on a random vector, :math:`X`, as:
+Define the quantile function of a random variable, :math:`Y`, conditional on a random vector, :math:`X`, as:
 
 .. math::
 
     Q_{Y | X} (\tau) := \inf \left\{ y : F_{Y|X}(y) \geq \tau \right\}
 
-Quantile regression models the conditional quantile function of a continuous random variable as an affine function of a feature set, :math:`X`, and a parameter vector, 
-:math:`\beta`: :math:`Q_{Y | X} (\tau) = X \beta(\tau)`, which varies by the quantile of interest.
+where :math:`\tau \in [0,1]` and :math:`F_{Y|X}` denotes the conditional distribution function of :math:`Y` given :math:`X`.
 
-The estimator for :math:`\beta(\tau)` is given by the solution to an optimization problem:
+Quantile regression models the conditional quantile function of a continuous random variable as an affine function of a feature set, :math:`X`, and a parameter vector, 
+:math:`\beta`. That is: :math:`Q_{Y | X} (\tau) = X \beta(\tau)`, where we emphasize that the parameter vector, :math:`\beta`, varies by the quantile of interest.
+
+The standard frequentist estimator for :math:`\beta(\tau)` is given by the solution to the following optimization problem:
 
 .. math::
 
     \hat{\beta}(\tau) = \arg \min_{\beta} \left\{ \sum_{i=1}^N \rho_{\tau} (Y_i - X_i \beta) \right\}
 
-where :math:`\rho_{\tau}` denotes the check function
+where :math:`\rho_{\tau}` denotes the check function:
 
 .. math::
 
     \rho_{\tau} (y) = y (\tau - \mathbf{1}[y < 0])
 
-In practice, this problem is solved by linear programming techniques.
+In practice, this optimization problem is solved by linear programming techniques.
 
 Bayesian Quantile Regression
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -42,7 +44,10 @@ The Bayesian version of the classical quantile regression problem assumes that t
 
     f(y | \mu, \sigma, \tau) = \frac{\tau (1 - \tau)}{\sigma} \exp \left( - \rho_{\tau} \left( \frac{y - \mu}{\sigma} \right) \right)
 
-The statistical model is defined using a mixture representation of the ALD:
+where :math:`\mu` is the location parameter, :math:`\sigma` is the scale parameter, and :math:`\tau` is the "asymmetry" parameter. Note that when :math:`\tau = 0.5`, the ALD density collapses 
+to that of the Laplace distribution (with a rescaled scaling parameter).
+
+The statistical model is defined using a mean-variance mixture representation of the ALD:
 
 .. math::
 
@@ -61,7 +66,7 @@ where the quantile-dependent parameters :math:`\theta(\tau)` and :math:`\omega(\
         \omega(\tau) &= \sqrt{ \frac{2}{\tau (1 - \tau)} }
     \end{aligned}
 
-The likelihood function is given by:
+The likelihood function is then given by:
 
 .. math::
 

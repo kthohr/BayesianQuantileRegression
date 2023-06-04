@@ -46,14 +46,14 @@ The C++ implementation of BQReg is a header-only library. First, clone the libra
     git submodule update --init
 
 
-Then simply add the header files (found under `cpp/include`) to your project using:
+Then simply add the BQReg header files (found under ``cpp/include``) to your project using:
 
 .. code:: cpp
 
     #include "bqreg.hpp"
 
 
-The only other dependencies are a copy of `Eigen <http://eigen.tuxfamily.org/index.php>`_ (version >= 3.4.0) and a C++14-compatible compiler.
+Beyond the files contained in the Git submodules, the only dependencies are a copy of `Eigen <http://eigen.tuxfamily.org/index.php>`_ (version >= 3.4.0) and a C++14-compatible compiler.
 
 For detailed instructions on how to install the R and Python bindings, see the :ref:`installation page <installation>`.
 

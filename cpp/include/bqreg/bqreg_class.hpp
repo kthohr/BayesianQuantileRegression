@@ -35,8 +35,8 @@ class bqreg_t
 
         ColVec_t prior_beta_mean; /*!< Mean of the prior distribution for \f$ \beta \f$ */
         Mat_t prior_beta_var;     /*!< Variance of the prior distribution for \f$ \beta \f$ */
-        fp_t prior_sigma_shape;   /*!< Shape parameter of the prior distribution for \f$ \sigma^2 \f$ */
-        fp_t prior_sigma_scale;   /*!< Scale parameter of the prior distribution for \f$ \sigma^2 \f$ */
+        fp_t prior_sigma_shape;   /*!< Shape parameter of the prior distribution for \f$ \sigma \f$ */
+        fp_t prior_sigma_scale;   /*!< Scale parameter of the prior distribution for \f$ \sigma \f$ */
 
         //
 
@@ -147,8 +147,8 @@ class bqreg_t
          *
          * @param prior_beta_mean_inp mean of the prior distribution for \f$ \beta \f$
          * @param prior_beta_var_inp variance of the prior distribution for \f$ \beta \f$
-         * @param prior_sigma_shape_inp shape parameter of the prior distribution for \f$ \sigma^2 \f$
-         * @param prior_sigma_scale_inp scale parameter of the prior distribution for \f$ \sigma^2 \f$
+         * @param prior_sigma_shape_inp shape parameter of the prior distribution for \f$ \sigma \f$
+         * @param prior_sigma_scale_inp scale parameter of the prior distribution for \f$ \sigma \f$
          */
         
         void set_prior_params(const ColVec_t& prior_beta_mean_inp, const Mat_t& prior_beta_var_inp, const fp_t prior_sigma_shape_inp, const fp_t prior_sigma_scale_inp);
