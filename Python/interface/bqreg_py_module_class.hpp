@@ -62,6 +62,6 @@ class bqreg_module_Py
         ColVec_t beta_initial_draw;
 };
 
-#include "bqreg_Py_module_fns.hpp"
+#include "bqreg_py_module_fns.hpp"
 
 #endif
